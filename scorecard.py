@@ -1,5 +1,5 @@
 """
-This code contains common errors that can by detected 
+This code contains common errors that can by detected
 by static type checking -- if the type is known!
 Please do not fix this code by inspection.
 
@@ -13,29 +13,31 @@ Observe how the type hint helps it perform static checking.
 3) add type to self.scores attribute:    `self.scores: ???[???] = []`
 4) add type hints for all parameters and return values.
    If a function does not return a value, don't write a type hint.
-5) add type to the `suffixes` variable in `ordinal()` function. 
+5) add type to the `suffixes` variable in `ordinal()` function.
    Include the type of keys and values.
 
 """
 
+from collections.abc import Iterable
 
-class Scorecard:
+
+class Scorecard(Iterable[float]):
     """Accumulate scores and compute their average."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Iniiialize a new Scorecard."""
-        self.scores = []
+        self.scores: list[float] = []
 
-    def add_score(self, score):
+    def add_score(self, score: float) -> None:
         """Add a score to the Scorecard."""
         self.scores.append(score)
 
-    def average(self):
+    def average(self) -> float:
         """Return the average of all scores, 0 if no scores."""
-        return sum(self.scores)/max(1,len(self.scores))
+        return sum(self.scores) / max(1, len(self.scores))
 
 
-def print_scores(score_card):
+def print_scores(score_card: Scorecard) -> None:
     """Print statistics for the scorecard and the actual scores."""
 
     # What changes to Scorecard are needed in order to make this code work?
@@ -46,12 +48,12 @@ def print_scores(score_card):
         print(score)
 
 
-def ordinal(num):
+def ordinal(num: int) -> str:
     """Return the ordinal value of an integer; works for numbers up to 20.
 
     For examples: ordinal(1) is '1st', ordinal(2) is '2nd'.
     """
-    suffixes = {1: "st", 2: "nd", 3: "rd"}
+    suffixes: dict = {1: "st", 2: "nd", 3: "rd"}
     return str(num) + suffixes.get(num, "th")
 
 
@@ -60,7 +62,7 @@ if __name__ == "__main__":
     scorecard = Scorecard()
 
     print("Input 3 scores.")
-    for count in range(1,4):
+    for count in range(1, 4):
         score = input(f"input {ordinal(count)} score: ")
         scorecard.add_score(score)
 
