@@ -18,17 +18,17 @@ Observe how the type hint helps it perform static checking.
 
 """
 
-from collections.abc import Iterable
+from typing import Iterable, Iterator, Sized
 
 
-class Scorecard(Iterable[float]):
+class Scorecard(Iterable[float], Sized):
     """Accumulate scores and compute their average."""
 
-    def __init__(self) -> None:
+    def __init__(self):
         """Iniiialize a new Scorecard."""
         self.scores: list[float] = []
 
-    def add_score(self, score: float) -> None:
+    def add_score(self, score: float):
         """Add a score to the Scorecard."""
         self.scores.append(score)
 
@@ -36,8 +36,14 @@ class Scorecard(Iterable[float]):
         """Return the average of all scores, 0 if no scores."""
         return sum(self.scores) / max(1, len(self.scores))
 
+    def __iter__(self) -> Iterator:
+        return iter(self.scores)
 
-def print_scores(score_card: Scorecard) -> None:
+    def __len__(self) -> int:
+        return len(self.scores)
+
+
+def print_scores(score_card: Scorecard):
     """Print statistics for the scorecard and the actual scores."""
 
     # What changes to Scorecard are needed in order to make this code work?
@@ -53,7 +59,7 @@ def ordinal(num: int) -> str:
 
     For examples: ordinal(1) is '1st', ordinal(2) is '2nd'.
     """
-    suffixes: dict = {1: "st", 2: "nd", 3: "rd"}
+    suffixes: dict[int, str] = {1: "st", 2: "nd", 3: "rd"}
     return str(num) + suffixes.get(num, "th")
 
 
@@ -63,9 +69,9 @@ if __name__ == "__main__":
 
     print("Input 3 scores.")
     for count in range(1, 4):
-        score = input(f"input {ordinal(count)} score: ")
+        score = float(input(f"input {ordinal(count)} score: "))
         scorecard.add_score(score)
 
-    print("The average is " + scorecard.average())
+    print("The average is ", scorecard.average())
 
     print_scores(scorecard)
